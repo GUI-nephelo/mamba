@@ -1,5 +1,7 @@
 # Mamba
 
+## Forked from https://github.com/state-spaces/mamba a windows version
+
 ![Mamba](assets/selection.png "Selective State Space")
 > **Mamba: Linear-Time Sequence Modeling with Selective State Spaces**\
 > Albert Gu*, Tri Dao*\

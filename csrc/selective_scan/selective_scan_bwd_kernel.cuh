@@ -224,7 +224,7 @@ void selective_scan_bwd_kernel(SSMParamsBwd params) {
             const weight_t A_val = A[state_idx * params.A_dstate_stride];
             // Multiply the real part of A with LOG2E so we can use exp2f instead of expf.
             weight_t A_scaled;
-            constexpr float kLog2e = M_LOG2E;
+            constexpr float kLog2e = 1.4426950408889634074;
             if constexpr (!kIsComplex) {
                 A_scaled = A_val * kLog2e;
             } else {
@@ -512,14 +512,14 @@ void selective_scan_bwd_launch(SSMParamsBwd &params, cudaStream_t stream) {
 
                         if (kSmemSize >= 48 * 1024) {
 
-                            #ifndef USE_ROCM
+                            // #ifndef USE_ROCM
                             C10_CUDA_CHECK(cudaFuncSetAttribute(
                                 kernel, cudaFuncAttributeMaxDynamicSharedMemorySize, kSmemSize));
-                            #else
-                            C10_CUDA_CHECK(cudaFuncSetAttribute(
-                                (void *) kernel, cudaFuncAttributeMaxDynamicSharedMemorySize, kSmemSize));
-                            std::cerr << "Warning (selective_scan_bwd_kernel): attempting to set maxDynamicSharedMemorySize on an AMD GPU which is currently a non-op (in ROCm versions <= 6.1). This might lead to undefined behavior. \n" << std::endl;
-                            #endif
+                            // #else
+                            // C10_CUDA_CHECK(cudaFuncSetAttribute(
+                            //     (void *) kernel, cudaFuncAttributeMaxDynamicSharedMemorySize, kSmemSize));
+                            // std::cerr << "Warning (selective_scan_bwd_kernel): attempting to set maxDynamicSharedMemorySize on an AMD GPU which is currently a non-op (in ROCm versions <= 6.1). This might lead to undefined behavior. \n" << std::endl;
+                            // #endif
 
                         }
 
